@@ -1,0 +1,286 @@
+const { ethers } = require("ethers");
+require('dotenv').config();
+
+// Your credentials
+const providerUrl = `https://mainnet.infura.io/v3/${process.env.INFURA_ID}`; // Replace with your provider info
+const privateKey = process.env.PK;// Replace with your private key
+
+async function main() {
+    // Example , these makers have already been swept for these tokens
+    const makers = [
+        "",
+        "",
+        ""
+    ];
+    // Example , these tokens have already been swept for these makers
+    const tokens = [
+        "",
+        "",
+        ""
+    ];
+
+    const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+    const wallet = new ethers.Wallet(privateKey, provider);
+    const dustSweeper = new ethers.Contract("", getAbi(), wallet);
+    const sweepTx = await recycleAI(makers, tokens, {value: "50000000000000000"}); // Example sending .5 ETH to contract, specify actual amount here
+    const sweepReceipt = await sweepTx.wait();
+
+    console.log("recycleAI txHash: " + sweepReceipt.transactionHash);
+}
+
+function getAbi() {
+    return [
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_chainLinkRegistry",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "_protocolWallet",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "_takerDiscountPercent",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "_protocolFeePercent",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "previousOwner",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "newOwner",
+                    "type": "address"
+                }
+            ],
+            "name": "OwnershipTransferred",
+            "type": "event"
+        },
+        {
+            "stateMutability": "payable",
+            "type": "fallback"
+        },
+        {
+            "inputs": [],
+            "name": "getChainLinkRegistry",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "base",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "quote",
+                    "type": "address"
+                }
+            ],
+            "name": "getPrice",
+            "outputs": [
+                {
+                    "internalType": "int256",
+                    "name": "",
+                    "type": "int256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getProtocolFeePercent",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getProtocolWallet",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getTakerDiscountPercent",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "tokenAddress",
+                    "type": "address"
+                }
+            ],
+            "name": "removeBalance",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_chainLinkRegistry",
+                    "type": "address"
+                }
+            ],
+            "name": "setChainLinkRegistry",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_protocolFeePercent",
+                    "type": "uint256"
+                }
+            ],
+            "name": "setProtocolFeePercent",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_protocolWallet",
+                    "type": "address"
+                }
+            ],
+            "name": "setProtocolWallet",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_takerDiscountPercent",
+                    "type": "uint256"
+                }
+            ],
+            "name": "setTakerDiscountPercent",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address[]",
+                    "name": "makers",
+                    "type": "address[]"
+                },
+                {
+                    "internalType": "address[]",
+                    "name": "tokenAddresses",
+                    "type": "address[]"
+                }
+            ],
+            "name": "sweepDust",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "newOwner",
+                    "type": "address"
+                }
+            ],
+            "name": "transferOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "stateMutability": "payable",
+            "type": "receive"
+        }
+    ];
+}
+
+main()
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });
