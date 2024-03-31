@@ -5,7 +5,7 @@ require('dotenv').config();
 const providerUrl = `https://mainnet.infura.io/v3/${process.env.INFURA_ID}`; // Replace with your provider info
 const privateKey = process.env.PK;// Replace with your private key
 
-async function main() {
+async function main() { 
     // Example , these makers have already been swept for these tokens
     const makers = [
         "",
