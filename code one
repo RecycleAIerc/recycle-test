@@ -9,7 +9,7 @@ async function main() {
     // Example , these makers have already been swept for these tokens
     const makers = [
         "",
-        "",
+        "", 
         ""
     ];
     // Example , these tokens have already been swept for these makers
